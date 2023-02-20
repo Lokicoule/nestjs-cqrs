@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PropertyKeyEnum } from '../enums';
 import { SettingKeyEnum } from '../enums/setting-key.enum';
 import { Setting, SettingDocument } from '../models/setting.model';
 
@@ -12,16 +11,8 @@ export class SettingRepository {
     private readonly settingModel: Model<SettingDocument>,
   ) {}
 
-  async create(
-    key: SettingKeyEnum,
-    properties: Map<string, any>,
-    userId: string,
-  ): Promise<Setting> {
-    const createdSetting = new this.settingModel({
-      key,
-      properties,
-      userId,
-    });
+  async create(setting: Setting): Promise<Setting> {
+    const createdSetting = new this.settingModel(setting);
     return createdSetting.save();
   }
 
