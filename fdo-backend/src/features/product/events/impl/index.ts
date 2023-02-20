@@ -1,2 +1,2 @@
-export * from './product-code-generation-completed.event';
+export * from './generate-product-code-completed.event';
 export * from './product-created.event';
