@@ -6,6 +6,7 @@ import { CacheService } from './cache.service';
     NestCacheModule.register({
       max: 100,
       ttl: 60 * 60 * 24 * 7,
+      isGlobal: true,
     }),
   ],
   providers: [CacheService],
