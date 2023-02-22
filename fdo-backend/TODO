@@ -1,0 +1,20 @@
+# Setting
+[] module
+[] repository
+
+# Product
+[] repository
+[] queries
+[] resolvers
+[] module
+
+# Tests
+[] Setting
+  [] repository
+[] Product
+  [] commands handler
+  [] queries handler
+  [] events handler
+  [] repository
+  [] sagas
+  [] resolvers
