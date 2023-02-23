@@ -6,7 +6,6 @@ export class Config {
   @IsNotEmpty()
   public readonly http: {
     port: number;
-    url: string;
   };
 
   @IsNotEmpty()
@@ -27,7 +26,6 @@ export class Config {
   constructor() {
     this.http = {
       port: Number(process.env.HTTP_PORT),
-      url: process.env.HTTP_URL,
     };
     this.cognito = {
       clientId: process.env.COGNITO_CLIENT_ID,

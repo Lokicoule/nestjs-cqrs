@@ -13,8 +13,8 @@ export class ProductRepositoryImpl implements ProductRepository {
     private readonly productModel: Model<ProductDocument>,
   ) {}
 
-  generateId(): string {
-    return EntityIdGenerator.generate().id;
+  generateId(namespace?: string): string {
+    return EntityIdGenerator.generate(namespace).id;
   }
 
   async create(productData: Product): Promise<Product> {
@@ -33,13 +33,13 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async delete(userId: string, id: string): Promise<boolean> {
-    const result = await this.productModel.deleteOne({ _id: id, userId });
+    const result = await this.productModel.deleteOne({ id, userId });
     return result.deletedCount > 0;
   }
 
   async deleteMany(userId: string, ids: string[]): Promise<boolean> {
     const result = await this.productModel.deleteMany({
-      _id: { $in: ids },
+      id: { $in: ids },
       userId,
     });
     return result.deletedCount > 0;
@@ -54,7 +54,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     const queryObject = { userId };
 
     if (ids && ids.length) {
-      queryObject['_id'] = { $in: ids };
+      queryObject['id'] = { $in: ids };
     }
 
     const products = await this.productModel.find(queryObject).exec();

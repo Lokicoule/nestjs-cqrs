@@ -1,4 +1,4 @@
-import { v5 } from 'uuid';
+import { v4, v5 } from 'uuid';
 
 export class EntityIdGenerator {
   private readonly _id: string;
@@ -7,8 +7,12 @@ export class EntityIdGenerator {
     this._id = id;
   }
 
-  static generate(): EntityIdGenerator {
-    return new EntityIdGenerator(v5().split('-').join(''));
+  static generate(namespace?: string): EntityIdGenerator {
+    if (namespace) {
+      return new EntityIdGenerator(v5(namespace, v4()));
+    }
+
+    return new EntityIdGenerator(v4().split('-').join(''));
   }
 
   get id(): string {

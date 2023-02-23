@@ -1,24 +1,27 @@
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { CreateProductCommand } from '../commands';
-import { Product } from '../../domain/models';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ProductRepository } from '../../domain/interfaces/product.repository';
+import { Product } from '../../domain/models';
+import { CreateProductCommand } from '../commands';
 
 @CommandHandler(CreateProductCommand)
 export class CreateProductCommandHandler
   implements ICommandHandler<CreateProductCommand>
 {
-  constructor(
-    private readonly publisher: EventPublisher,
-    private readonly productRepository: ProductRepository,
-  ) {}
+  constructor(private readonly productRepository: ProductRepository) {}
 
   async execute(command: CreateProductCommand) {
     const { code, label, userId } = command;
-    const product = this.publisher.mergeObjectContext(
-      new Product(label, userId, code, this.productRepository.generateId()),
+    const id = this.productRepository.generateId(userId);
+
+    const product = await this.productRepository.create(
+      new Product({
+        id,
+        code,
+        label,
+        userId,
+      }),
     );
-    await this.productRepository.create(product);
-    product.commit();
+
     return product;
   }
 }

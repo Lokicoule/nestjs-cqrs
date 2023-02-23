@@ -1,5 +1,11 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+type ProductDTOProps = {
+  id: string;
+  code: string;
+  label: string;
+};
+
 @ObjectType()
 export class ProductDTO {
   @Field(() => ID)
@@ -16,4 +22,10 @@ export class ProductDTO {
 
   @Field()
   public readonly updatedAt: Date; */
+
+  constructor(props: ProductDTOProps) {
+    this.id = props.id;
+    this.code = props.code;
+    this.label = props.label;
+  }
 }

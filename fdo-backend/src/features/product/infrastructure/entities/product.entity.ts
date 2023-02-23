@@ -5,7 +5,12 @@ export type ProductDocument = Product & Document;
 
 @Schema({
   timestamps: true,
-  id: false,
+  toJSON: {
+    transform: (doc, ret) => {
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
 })
 export class Product {
   @Prop({ required: true, unique: true })
