@@ -1,19 +1,8 @@
 import { Module } from '@nestjs/common';
-import {
-  AuthModule,
-  CacheModule,
-  ConfigModule,
-  DatabaseModule,
-  GraphQLModule,
-} from '~/common';
+import { CacheModule, ConfigModule } from '~/common';
+import { FeaturesModule } from './features';
 
 @Module({
-  imports: [
-    AuthModule,
-    CacheModule,
-    ConfigModule,
-    DatabaseModule,
-    GraphQLModule,
-  ],
+  imports: [CacheModule, ConfigModule, FeaturesModule],
 })
 export class AppModule {}

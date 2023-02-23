@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
+/* import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Setting, SettingSchema } from './models/setting.model';
-import { SettingRepository } from './repositories';
+import { Setting, SettingSchema } from './domain/models/setting.model';
+import { SettingRepository } from './infrastructure/repositories';
 
 @Module({
   imports: [
@@ -11,3 +11,4 @@ import { SettingRepository } from './repositories';
   exports: [SettingRepository],
 })
 export class SettingModule {}
+ */
