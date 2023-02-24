@@ -8,4 +8,4 @@ import { ProductResolver } from './resolvers';
   imports: [CqrsModule, ProductApplicationModule, GraphQLModule, AuthModule],
   providers: [ProductResolver],
 })
-export class ProductPresentationModule {}
+export class ProductPortModule {}

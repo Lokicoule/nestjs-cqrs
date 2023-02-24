@@ -24,8 +24,6 @@ export class ProductDTO {
   public readonly updatedAt: Date; */
 
   constructor(props: ProductDTOProps) {
-    this.id = props.id;
-    this.code = props.code;
-    this.label = props.label;
+    Object.assign(this, props);
   }
 }

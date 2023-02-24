@@ -2,8 +2,8 @@ import { CognitoUser } from '@nestjs-cognito/auth';
 import { Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateProductCommand } from '../../application/commands/create-product.command';
-import { GetProductQuery } from '../../application/queries/get-product.query';
+import { CreateProductCommand } from '../../application/commands';
+import { GetProductQuery, GetProductsQuery } from '../../application/queries';
 import { CreateProductInputDTO, ProductDTO } from '../dtos';
 
 @Resolver(() => ProductDTO)
@@ -24,6 +24,17 @@ export class ProductResolver {
       new GetProductQuery(id, 'userId'),
     );
     return new ProductDTO(product);
+  }
+
+  @Query(() => [ProductDTO], { name: 'products' })
+  async getProducts(
+    /*  @CognitoUser('username') userId: string, */
+    @Args('ids', { type: () => [String] }) ids: string[],
+  ): Promise<ProductDTO[]> {
+    const products = await this.queryBus.execute(
+      new GetProductsQuery('userId', ids),
+    );
+    return products.map((product) => new ProductDTO(product));
   }
 
   @Mutation(() => ProductDTO)

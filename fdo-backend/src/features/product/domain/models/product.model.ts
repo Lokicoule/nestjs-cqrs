@@ -12,6 +12,8 @@ export type ProductOptionalFields = Readonly<
   Partial<{
     id: string;
     code: string;
+    createdAt: Date;
+    updatedAt: Date;
   }>
 >;
 
@@ -25,10 +27,7 @@ export class Product extends AggregateRoot {
 
   constructor(fields: ProductFields) {
     super();
-    this.id = fields.id;
-    this.code = fields.code;
-    this.label = fields.label;
-    this.userId = fields.userId;
+    Object.assign(this, fields);
   }
 
   applyCreation(): void {

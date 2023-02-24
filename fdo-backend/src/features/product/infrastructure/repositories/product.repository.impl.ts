@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { LeanDocument, Model } from 'mongoose';
 import { EntityIdGenerator } from '~/common';
 import { ProductRepository } from '../../domain/interfaces';
 import { Product } from '../../domain/models';
-import { ProductDocument } from '../entities';
+import { ProductDocument, ProductEntity } from '../entities';
 
 @Injectable()
 export class ProductRepositoryImpl implements ProductRepository {
   constructor(
-    @InjectModel(Product.name)
+    @InjectModel(ProductEntity.name)
     private readonly productModel: Model<ProductDocument>,
   ) {}
 
@@ -18,36 +18,37 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async create(productData: Product): Promise<Product> {
-    const productEntity = new this.productModel(productData);
-    const createdProductEntity = await productEntity.save();
-    return createdProductEntity ? createdProductEntity.toObject() : null;
+    const productDoc = new this.productModel(productData);
+    await productDoc.save();
+    return this.toProduct(productDoc);
   }
 
   async update(product: Product): Promise<Product> {
-    const updatedProduct = await this.productModel.findOneAndUpdate(
+    const updatedProductDoc = await this.productModel.findOneAndUpdate(
       { id: product.id, userId: product.userId },
       product,
-      { new: true },
+      { new: true, lean: true },
     );
-    return updatedProduct ? updatedProduct.toObject() : null;
+    return updatedProductDoc ? this.toProduct(updatedProductDoc) : null;
   }
 
-  async delete(userId: string, id: string): Promise<boolean> {
-    const result = await this.productModel.deleteOne({ id, userId });
-    return result.deletedCount > 0;
+  async delete(userId: string, id: string): Promise<void> {
+    await this.productModel.deleteOne({ id, userId });
   }
 
-  async deleteMany(userId: string, ids: string[]): Promise<boolean> {
-    const result = await this.productModel.deleteMany({
+  async deleteMany(userId: string, ids: string[]): Promise<void> {
+    await this.productModel.deleteMany({
       id: { $in: ids },
       userId,
     });
-    return result.deletedCount > 0;
   }
 
   async find(userId: string, id: string): Promise<Product> {
-    const product = await this.productModel.findOne({ id, userId }).exec();
-    return product ? product.toObject() : null;
+    const productDoc = await this.productModel
+      .findOne({ id, userId })
+      .lean()
+      .exec();
+    return this.toProduct(productDoc);
   }
 
   async findAll(userId: string, ids?: string[]): Promise<Product[]> {
@@ -57,7 +58,14 @@ export class ProductRepositoryImpl implements ProductRepository {
       queryObject['id'] = { $in: ids };
     }
 
-    const products = await this.productModel.find(queryObject).exec();
-    return products ? products.map((p) => p.toObject()) : [];
+    const productsDoc = await this.productModel.find(queryObject).lean().exec();
+    return productsDoc ? productsDoc.map((doc) => this.toProduct(doc)) : [];
+  }
+
+  private toProduct(
+    doc: LeanDocument<ProductDocument> | ProductDocument,
+  ): Product {
+    const { id, code, label, userId, createdAt, updatedAt } = doc;
+    return new Product({ id, code, label, userId, createdAt, updatedAt });
   }
 }

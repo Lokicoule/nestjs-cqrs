@@ -1,18 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type ProductDocument = Product & Document;
+export type ProductDocument = ProductEntity & Document;
 
 @Schema({
+  collection: 'products',
   timestamps: true,
-  toJSON: {
-    transform: (doc, ret) => {
-      delete ret._id;
-      delete ret.__v;
-    },
-  },
 })
-export class Product {
+export class ProductEntity {
   @Prop({ required: true, unique: true })
   id: string;
 
@@ -32,4 +27,4 @@ export class Product {
   updatedAt: Date;
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+export const ProductSchema = SchemaFactory.createForClass(ProductEntity);
