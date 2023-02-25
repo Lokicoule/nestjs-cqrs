@@ -31,24 +31,35 @@ export class SettingValidator {
     Object.assign(this, { userId, settingKey, properties });
   }
 
-  public validate(): ValidationError | null {
+  public validate(): ValidationError[] | null {
+    const validationErrors: ValidationError[] = [];
     const settingErrors = validateSync(this);
-    const propertyErrors =
-      [...this.properties.entries()].map(([key, property]) =>
-        property.validate(),
-      ) ?? [];
+    validationErrors.push(...settingErrors);
 
-    const errors = settingErrors
-      .concat(propertyErrors)
-      .filter((error) => error !== null);
+    for (const [key, property] of this.properties.entries()) {
+      const errors = property.validate() ?? [];
+      validationErrors.push(
+        ...errors.map((error) => this.prependPropertyKeyToErrorKey(key, error)),
+      );
+    }
 
-    if (errors.length > 0) {
-      const errorMessages = errors.map((error) => error?.toString());
-      const error = new ValidationError();
-      error.constraints = { validationError: errorMessages.join(', ') };
-      return error;
+    if (validationErrors.length > 0) {
+      return validationErrors;
     }
 
     return null;
+  }
+
+  private prependPropertyKeyToErrorKey(
+    key: string,
+    error: ValidationError,
+  ): ValidationError {
+    const newError = new ValidationError();
+    newError.property = `${key}.${error.property}`;
+    newError.constraints = error.constraints;
+    newError.children = error.children?.map((childError) =>
+      this.prependPropertyKeyToErrorKey(key, childError),
+    );
+    return newError;
   }
 }

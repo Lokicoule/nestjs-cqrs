@@ -43,14 +43,11 @@ export class PropertyValidator {
     Object.assign(this, { key, value });
   }
 
-  public validate(): ValidationError | null {
+  public validate(): ValidationError[] | null {
     const errors = validateSync(this, { groups: [this.key] });
 
     if (errors.length > 0) {
-      const errorMessages = errors.map((error) => error.toString());
-      const error = new ValidationError();
-      error.constraints = { validationError: errorMessages.join(', ') };
-      return error;
+      return errors;
     }
 
     return null;
