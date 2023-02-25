@@ -1,26 +1,23 @@
-/* import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseModule } from '~/common';
-import { Product, ProductSchema } from './entities';
-import { ProductRepositoryImpl } from './repositories';
+import { SettingRepository } from '../domain/interfaces';
+import { SettingEntity, SettingSchema } from './entities';
+import { SettingRepositoryImpl } from './repositories';
 
 @Module({
   imports: [
     DatabaseModule,
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+    MongooseModule.forFeature([
+      { name: SettingEntity.name, schema: SettingSchema },
+    ]),
   ],
   providers: [
     {
-      provide: 'ProductRepository',
-      useClass: ProductRepositoryImpl,
+      provide: SettingRepository,
+      useClass: SettingRepositoryImpl,
     },
   ],
-  exports: [
-    {
-      provide: 'ProductRepository',
-      useClass: ProductRepositoryImpl,
-    },
-  ],
+  exports: [SettingRepository],
 })
 export class SettingInfrastructureModule {}
- */

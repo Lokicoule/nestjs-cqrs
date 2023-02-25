@@ -24,6 +24,8 @@ export class Product extends AggregateRoot {
   public readonly code: string;
   public readonly label: string;
   public readonly userId: string;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
 
   constructor(fields: ProductFields) {
     super();

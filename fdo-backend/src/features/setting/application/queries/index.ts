@@ -1,1 +1,1 @@
-export * from './get-setting.query';
+export * from './get-setting-by-key.query';

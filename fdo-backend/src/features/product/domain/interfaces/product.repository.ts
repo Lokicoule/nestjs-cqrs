@@ -8,4 +8,5 @@ export abstract class ProductRepository {
   abstract deleteMany(userId: string, ids: string[]): Promise<void>;
   abstract find(userId: string, id: string): Promise<Product>;
   abstract findAll(userId: string, ids?: string[]): Promise<Product[]>;
+  abstract exists(userId: string, code: string): Promise<boolean>;
 }

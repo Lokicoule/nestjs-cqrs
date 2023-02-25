@@ -62,6 +62,11 @@ export class ProductRepositoryImpl implements ProductRepository {
     return productsDoc ? productsDoc.map((doc) => this.toProduct(doc)) : [];
   }
 
+  async exists(userId: string, code: string): Promise<boolean> {
+    const productDoc = await this.productModel.exists({ userId, code }).lean();
+    return Boolean(productDoc);
+  }
+
   private toProduct(
     doc: LeanDocument<ProductDocument> | ProductDocument,
   ): Product {

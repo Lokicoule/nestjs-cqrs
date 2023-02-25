@@ -1,28 +1,35 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { PropertyKeyEnum, SettingKeyEnum } from '../enums';
+import { Property } from './property.model';
 
 export type SettingRequiredFields = Readonly<
   Required<{
     id: string;
     key: SettingKeyEnum;
-    properties: Map<PropertyKeyEnum, any>;
+    properties: Map<PropertyKeyEnum, Property>;
     userId: string;
   }>
 >;
 
-export type SettingFields = SettingRequiredFields;
+export type SettingOptionalFields = Readonly<
+  Partial<{
+    createdAt: Date;
+    updatedAt: Date;
+  }>
+>;
+
+export type SettingFields = SettingRequiredFields & SettingOptionalFields;
 
 export class Setting extends AggregateRoot {
   public readonly id: string;
   public readonly key: SettingKeyEnum;
-  public readonly properties: Map<PropertyKeyEnum, any>;
+  public readonly properties: Map<PropertyKeyEnum, Property>;
   public readonly userId: string;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
 
   constructor(fields: SettingFields) {
     super();
-    this.id = fields.id;
-    this.key = fields.key;
-    this.properties = fields.properties;
-    this.userId = fields.userId;
+    Object.assign(this, fields);
   }
 }

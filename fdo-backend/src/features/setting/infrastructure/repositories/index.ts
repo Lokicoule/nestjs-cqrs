@@ -1,2 +1,1 @@
-/* export * from './setting.repository.impl';
- */
+export * from './setting.repository.impl';

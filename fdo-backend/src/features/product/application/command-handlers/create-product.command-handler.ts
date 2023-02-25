@@ -2,6 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ProductRepository } from '../../domain/interfaces/product.repository';
 import { Product } from '../../domain/models';
 import { CreateProductCommand } from '../commands';
+import { BadRequestException } from '@nestjs/common';
 
 @CommandHandler(CreateProductCommand)
 export class CreateProductCommandHandler
@@ -11,6 +12,18 @@ export class CreateProductCommandHandler
 
   async execute(command: CreateProductCommand) {
     const { code, label, userId } = command;
+
+    if (!code) {
+      // todo: use command bus to dispatch a command to generate a new code
+      throw new BadRequestException('Product code is required');
+    }
+
+    if (await this.productRepository.exists(userId, code)) {
+      throw new BadRequestException(
+        'Product code already exists in database for this user',
+      );
+    }
+
     const id = this.productRepository.generateId(userId);
 
     const product = await this.productRepository.create(
