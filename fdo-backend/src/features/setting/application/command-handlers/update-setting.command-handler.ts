@@ -1,21 +1,26 @@
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SettingRepository } from '../../domain/interfaces/setting.repository';
+import {
+  SettingRepository,
+  SettingValidatorBuilder,
+} from '../../domain/interfaces';
 import { Setting } from '../../domain/models';
-import { SettingValidatorBuilder } from '../../domain/validators';
 import { UpdateSettingCommand } from '../commands';
 
 @CommandHandler(UpdateSettingCommand)
 export class UpdateSettingCommandHandler
   implements ICommandHandler<UpdateSettingCommand>
 {
-  constructor(private readonly settingRepository: SettingRepository) {}
+  constructor(
+    private readonly settingRepository: SettingRepository,
+    private readonly settingValidatorBuilder: SettingValidatorBuilder,
+  ) {}
 
   async execute(command: UpdateSettingCommand) {
     this.validateSetting(command);
 
-    const { userId, properties, settingKey, settingId } = command;
-    const condition = { key: settingKey, id: settingId };
+    const { userId, key, id } = command;
+    const condition = { key, id };
 
     if (!(await this.settingRepository.exists(userId, condition))) {
       throw new BadRequestException(
@@ -24,14 +29,7 @@ export class UpdateSettingCommandHandler
     }
 
     try {
-      return this.settingRepository.update(
-        new Setting({
-          id: settingId,
-          key: settingKey,
-          properties,
-          userId,
-        }),
-      );
+      return this.settingRepository.update(new Setting(command));
     } catch (error) {
       throw new BadRequestException(
         `Failed to update setting: ${error.message}`,
@@ -40,13 +38,8 @@ export class UpdateSettingCommandHandler
   }
 
   private validateSetting(command: UpdateSettingCommand) {
-    const { userId, properties, settingKey, settingId } = command;
-    const validation = new SettingValidatorBuilder()
-      .withId(settingId)
-      .withUserId(userId)
-      .withProperties(properties)
-      .withSettingKey(settingKey)
-      .buildWithId()
+    const validation = this.settingValidatorBuilder
+      .buildUpdateSettingValidator(command)
       .validate();
 
     if (validation) {

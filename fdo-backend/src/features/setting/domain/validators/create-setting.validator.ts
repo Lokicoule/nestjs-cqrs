@@ -6,26 +6,23 @@ import {
   ValidationError,
 } from 'class-validator';
 import { PropertyKeyEnum, SettingKeyEnum } from '../enums';
+import { SettingValidator } from '../interfaces';
 import { PropertyValidator } from './property.validator';
 
-export interface ISettingValidator {
-  validate(): ValidationError[] | null;
-}
-
-export type SettingValidatorProps = {
+export type CreateSettingValidatorProps = {
   userId: string;
-  settingKey: SettingKeyEnum;
+  key: SettingKeyEnum;
   properties: Map<PropertyKeyEnum, PropertyValidator>;
 };
 
-export class SettingValidator implements ISettingValidator {
-  @IsString()
+export class CreateSettingValidator implements SettingValidator {
   @IsNotEmpty()
+  @IsString()
   public readonly userId: string;
 
   @IsNotEmpty()
   @IsEnum(SettingKeyEnum)
-  public readonly settingKey: SettingKeyEnum;
+  public readonly key: SettingKeyEnum;
 
   @IsNotEmpty()
   // This doesn't work because the Map is not compatible with the @ValidateNested decorator:
@@ -33,7 +30,7 @@ export class SettingValidator implements ISettingValidator {
   @Type(() => PropertyValidator) */
   public readonly properties: Map<PropertyKeyEnum, PropertyValidator>;
 
-  constructor(settingProperties: SettingValidatorProps) {
+  constructor(settingProperties: CreateSettingValidatorProps) {
     Object.assign(this, settingProperties);
   }
 

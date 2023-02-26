@@ -1,32 +1,25 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Setting } from '../../domain/models/setting.model';
+import { PropertyKeyEnum, SettingKeyEnum } from '../../domain/enums';
 
-@Schema({
-  collection: 'settings',
-  timestamps: true,
-})
-export class SettingEntity extends AggregateRoot {
-  @Prop({
-    required: true,
-    enum: Object.values(Setting['key']),
-  })
-  key: Setting['key'];
+@Schema({ collection: 'settings', timestamps: true })
+export class SettingEntity {
+  @Prop({ required: true })
+  key: SettingKeyEnum;
 
   @Prop({
     type: Map,
-    of: String,
+    of: String || Number,
     validate: {
-      validator: function (value) {
+      validator: function (value: Map<PropertyKeyEnum, string | number>) {
         return Object.keys(value).every((key) =>
-          Object.values(Setting['properties']).includes(key),
+          Object.values(PropertyKeyEnum).includes(key as PropertyKeyEnum),
         );
       },
       message: 'Invalid property key',
     },
   })
-  properties: Map<Setting['properties'], any>;
+  properties: Map<PropertyKeyEnum, string | number>;
 
   @Prop({ required: true })
   userId: string;

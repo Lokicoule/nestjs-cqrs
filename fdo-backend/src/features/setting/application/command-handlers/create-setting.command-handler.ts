@@ -1,21 +1,26 @@
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { SettingRepository } from '../../domain/interfaces';
+import {
+  SettingRepository,
+  SettingValidatorBuilder,
+} from '../../domain/interfaces';
 import { Setting } from '../../domain/models';
-import { SettingValidatorBuilder } from '../../domain/validators';
 import { CreateSettingCommand } from '../commands';
 
 @CommandHandler(CreateSettingCommand)
 export class CreateSettingCommandHandler
   implements ICommandHandler<CreateSettingCommand>
 {
-  constructor(private readonly settingRepository: SettingRepository) {}
+  constructor(
+    private readonly settingRepository: SettingRepository,
+    private readonly settingValidatorBuilder: SettingValidatorBuilder,
+  ) {}
 
   async execute(command: CreateSettingCommand) {
     this.validateSetting(command);
 
-    const { userId, properties, settingKey } = command;
-    const condition = { key: settingKey };
+    const { userId, properties, key } = command;
+    const condition = { key };
 
     if (await this.settingRepository.exists(userId, condition)) {
       throw new BadRequestException(
@@ -29,7 +34,7 @@ export class CreateSettingCommandHandler
       return this.settingRepository.create(
         new Setting({
           id,
-          key: settingKey,
+          key,
           properties,
           userId,
         }),
@@ -42,12 +47,8 @@ export class CreateSettingCommandHandler
   }
 
   private validateSetting(command: CreateSettingCommand) {
-    const { userId, properties, settingKey } = command;
-    const validation = new SettingValidatorBuilder()
-      .withUserId(userId)
-      .withProperties(properties)
-      .withSettingKey(settingKey)
-      .build()
+    const validation = this.settingValidatorBuilder
+      .buildCreateSettingValidator(command)
       .validate();
 
     if (validation) {
