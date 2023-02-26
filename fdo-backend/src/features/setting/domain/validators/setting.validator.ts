@@ -8,7 +8,17 @@ import {
 import { PropertyKeyEnum, SettingKeyEnum } from '../enums';
 import { PropertyValidator } from './property.validator';
 
-export class SettingValidator {
+export interface ISettingValidator {
+  validate(): ValidationError[] | null;
+}
+
+export type SettingValidatorProps = {
+  userId: string;
+  settingKey: SettingKeyEnum;
+  properties: Map<PropertyKeyEnum, PropertyValidator>;
+};
+
+export class SettingValidator implements ISettingValidator {
   @IsString()
   @IsNotEmpty()
   public readonly userId: string;
@@ -23,12 +33,8 @@ export class SettingValidator {
   @Type(() => PropertyValidator) */
   public readonly properties: Map<PropertyKeyEnum, PropertyValidator>;
 
-  constructor(
-    userId: string,
-    settingKey: SettingKeyEnum,
-    properties: Map<PropertyKeyEnum, PropertyValidator>,
-  ) {
-    Object.assign(this, { userId, settingKey, properties });
+  constructor(settingProperties: SettingValidatorProps) {
+    Object.assign(this, settingProperties);
   }
 
   public validate(): ValidationError[] | null {
