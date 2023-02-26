@@ -64,6 +64,9 @@
     "typescript": "^4.3.5"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^~/(.*)$": "<rootDir>/$1"
+    },
     "moduleFileExtensions": [
       "js",
       "json",

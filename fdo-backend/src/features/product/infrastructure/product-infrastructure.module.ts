@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { DatabaseModule } from '~/common';
-import { ProductRepository } from '../domain/interfaces';
+import { DatabaseModule } from '~/common/database';
+import {
+  ProductRepository,
+  ProductValidatorBuilder,
+} from '../domain/interfaces';
 import { ProductEntity, ProductSchema } from './entities';
 import { ProductRepositoryImpl } from './repositories';
+import { ProductValidatorBuilderImpl } from './validators/product.validator.builder.impl';
 
 @Module({
   imports: [
@@ -17,7 +21,11 @@ import { ProductRepositoryImpl } from './repositories';
       provide: ProductRepository,
       useClass: ProductRepositoryImpl,
     },
+    {
+      provide: ProductValidatorBuilder,
+      useClass: ProductValidatorBuilderImpl,
+    },
   ],
-  exports: [ProductRepository],
+  exports: [ProductRepository, ProductValidatorBuilder],
 })
 export class ProductInfrastructureModule {}
