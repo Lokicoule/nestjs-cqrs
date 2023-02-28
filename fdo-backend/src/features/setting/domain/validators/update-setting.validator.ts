@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { SettingValidator } from '../interfaces';
+import { SettingValidator } from '../interfaces/validators';
 import {
   CreateSettingValidator,
   CreateSettingValidatorProps,

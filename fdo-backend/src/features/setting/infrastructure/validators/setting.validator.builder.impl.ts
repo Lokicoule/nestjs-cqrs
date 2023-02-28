@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateSettingCommand,
   UpdateSettingCommand,
-} from '../../domain/commands';
+} from '~/features/setting/domain/interfaces/commands';
 import {
   SettingValidator,
   SettingValidatorBuilder,
-} from '../../domain/interfaces';
+} from '~/features/setting/domain/interfaces/validators';
 import {
   CreateSettingValidator,
   UpdateSettingValidator,
-} from '../../domain/validators';
+} from '~/features/setting/domain/validators';
 
 @Injectable()
 export class SettingValidatorBuilderImpl extends SettingValidatorBuilder {

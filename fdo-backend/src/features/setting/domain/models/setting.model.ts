@@ -19,7 +19,15 @@ export type SettingOptionalFields = Readonly<
 
 export type SettingFields = SettingRequiredFields & SettingOptionalFields;
 
-export class Setting extends AggregateRoot {
+export interface Setting {
+  readonly id: string;
+  readonly key: SettingKeyEnum;
+  readonly properties: Map<PropertyKeyEnum, string | number>;
+  readonly userId: string;
+  incrementCounter(): void;
+}
+
+export class SettingImpl extends AggregateRoot implements Setting {
   public readonly id: string;
   public readonly key: SettingKeyEnum;
   public readonly properties: Map<PropertyKeyEnum, string | number>;
@@ -30,5 +38,12 @@ export class Setting extends AggregateRoot {
   constructor(fields: SettingFields) {
     super();
     Object.assign(this, fields);
+  }
+
+  incrementCounter() {
+    const counter = this.properties.get(PropertyKeyEnum.COUNTER) || 0;
+    this.properties.set(PropertyKeyEnum.COUNTER, Number(counter) + 1);
+
+    //this.apply(new SettingCounterUpdatedEvent(this));
   }
 }

@@ -3,7 +3,10 @@ import { Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateProductCommand } from '../../application/commands';
-import { GetProductQuery, GetProductsQuery } from '../../application/queries';
+import {
+  GetProductQuery,
+  GetProductsQuery,
+} from '../../application/queries/impl';
 import { CreateProductInputDTO, ProductDTO } from '../dtos';
 
 @Resolver(() => ProductDTO)

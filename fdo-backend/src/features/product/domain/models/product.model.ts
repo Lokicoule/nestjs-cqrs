@@ -1,5 +1,7 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { ProductCreatedEvent } from '../events/product-created.event';
+import { SettingCounterUpdatedEvent } from '~/features/setting/application/events/impl';
+import { PropertyKeyEnum } from '~/features/setting/domain/enums';
+import { Setting } from '~/features/setting/domain/models';
 
 export type ProductRequiredFields = Readonly<
   Required<{
@@ -21,19 +23,32 @@ export type ProductFields = ProductRequiredFields & ProductOptionalFields;
 
 export class Product extends AggregateRoot {
   public readonly id: string;
-  public readonly code: string;
-  public readonly label: string;
   public readonly userId: string;
-  public readonly createdAt: Date;
-  public readonly updatedAt: Date;
+  private code: string;
+  private readonly label: string;
+  private readonly createdAt: Date;
+  private readonly updatedAt: Date;
 
   constructor(fields: ProductFields) {
     super();
     Object.assign(this, fields);
   }
 
-  applyCreation(): void {
-    const event = new ProductCreatedEvent(this);
-    this.apply(event);
+  updateSettingCounter(setting: Setting) {
+    setting.incrementCounter();
+
+    this.apply(new SettingCounterUpdatedEvent(setting));
+  }
+
+  generateCode(setting: Setting) {
+    const prefix = setting.getProperty(PropertyKeyEnum.PREFIX);
+    const suffix = setting.getProperty(PropertyKeyEnum.SUFFIX);
+    const counter = setting.getProperty(PropertyKeyEnum.COUNTER);
+
+    this.code = `${prefix}${counter.toString().padStart(3, '0')}${suffix}`;
+  }
+
+  getCode() {
+    return this.code;
   }
 }

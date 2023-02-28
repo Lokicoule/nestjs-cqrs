@@ -6,7 +6,7 @@ import {
   ValidationError,
 } from 'class-validator';
 import { PropertyKeyEnum, SettingKeyEnum } from '../enums';
-import { SettingValidator } from '../interfaces';
+import { SettingValidator } from '../interfaces/validators';
 import { PropertyValidator } from './property.validator';
 
 export type CreateSettingValidatorProps = {

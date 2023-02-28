@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument, Model } from 'mongoose';
 import { EntityIdGenerator } from '~/common/database';
-import { SettingKeyEnum } from '../../domain/enums';
-import { SettingRepository } from '../../domain/interfaces';
-import { Setting } from '../../domain/models';
+import { SettingKeyEnum } from '~/features/setting/domain/enums';
+import { SettingFactory } from '~/features/setting/domain/interfaces/factories';
+import { SettingRepository } from '~/features/setting/domain/interfaces/repositories';
+import { Setting } from '~/features/setting/domain/models';
 import { SettingDocument, SettingEntity } from '../entities';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class SettingRepositoryImpl implements SettingRepository {
   constructor(
     @InjectModel(SettingEntity.name)
     private readonly settingModel: Model<SettingDocument>,
+    private readonly settingFactory: SettingFactory,
   ) {}
 
   generateId(namespace?: string): string {
@@ -83,7 +85,7 @@ export class SettingRepositoryImpl implements SettingRepository {
     doc: LeanDocument<SettingDocument> | SettingDocument,
   ): Setting {
     const { id, key, properties, userId, createdAt, updatedAt } = doc;
-    return new Setting({
+    return this.settingFactory.create({
       id,
       key,
       properties,

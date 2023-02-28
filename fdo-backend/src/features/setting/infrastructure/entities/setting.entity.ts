@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { PropertyKeyEnum, SettingKeyEnum } from '../../domain/enums';
+import {
+  PropertyKeyEnum,
+  SettingKeyEnum,
+} from '~/features/setting/domain/enums';
 
 @Schema({ collection: 'settings', timestamps: true })
 export class SettingEntity {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateProductCommand,
   UpdateProductCommand,
-} from '../../domain/commands';
+} from '../../domain/interfaces/commands';
 import {
   ProductValidator,
   ProductValidatorBuilder,

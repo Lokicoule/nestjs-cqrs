@@ -1,12 +1,12 @@
 import {
   CreateSettingCommand,
   UpdateSettingCommand,
-} from '../../domain/commands';
-import { SettingKeyEnum } from '../../domain/enums';
+} from '~/features/setting/domain/interfaces/commands';
+import { SettingKeyEnum } from '~/features/setting/domain/enums';
 import {
   CreateSettingValidator,
   UpdateSettingValidator,
-} from '../../domain/validators';
+} from '~/features/setting/domain/validators';
 import { SettingValidatorBuilderImpl } from './setting.validator.builder.impl';
 
 describe('SettingValidatorBuilderImpl', () => {

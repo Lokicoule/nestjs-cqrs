@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument, Model } from 'mongoose';
-import { EntityIdGenerator } from '~/common';
-import { ProductRepository } from '../../domain/interfaces';
+import { EntityIdGenerator } from '~/common/database';
+import { ProductRepository } from '../../domain/interfaces/repositories';
 import { Product } from '../../domain/models';
 import { ProductDocument, ProductEntity } from '../entities';
 

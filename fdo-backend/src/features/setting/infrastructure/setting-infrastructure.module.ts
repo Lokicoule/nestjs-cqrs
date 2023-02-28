@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseModule } from '~/common/database';
-import {
-  SettingRepository,
-  SettingValidatorBuilder,
-} from '../domain/interfaces';
+import { SettingFactory } from '~/features/setting/domain/interfaces/factories';
+import { SettingRepository } from '~/features/setting/domain/interfaces/repositories';
+import { SettingValidatorBuilder } from '~/features/setting/domain/interfaces/validators';
 import { SettingEntity, SettingSchema } from './entities';
+import { SettingFactoryImpl } from './factories';
 import { SettingRepositoryImpl } from './repositories';
-import { SettingValidatorBuilderImpl } from './validators/setting.validator.builder.impl';
+import { SettingValidatorBuilderImpl } from './validators';
 
 @Module({
   imports: [
@@ -25,7 +25,11 @@ import { SettingValidatorBuilderImpl } from './validators/setting.validator.buil
       provide: SettingValidatorBuilder,
       useClass: SettingValidatorBuilderImpl,
     },
+    {
+      provide: SettingFactory,
+      useClass: SettingFactoryImpl,
+    },
   ],
-  exports: [SettingRepository, SettingValidatorBuilder],
+  exports: [SettingRepository, SettingValidatorBuilder, SettingFactory],
 })
 export class SettingInfrastructureModule {}
