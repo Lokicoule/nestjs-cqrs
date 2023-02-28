@@ -1,7 +1,7 @@
 import { ValidationError } from 'class-validator';
 import { PropertyKeyEnum, SettingKeyEnum } from '../enums';
 import { CreateSettingValidator } from './create-setting.validator';
-import { PropertyValidatorBuilder } from './property.validator.builder';
+import { PropertyValidator } from './property.validator';
 
 describe('CreateSettingValidator', () => {
   it('should validate a valid setting', () => {
@@ -11,24 +11,15 @@ describe('CreateSettingValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
         [
           PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.COUNTER)
-            .withValue(123)
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.COUNTER, 123),
         ],
       ]),
     });
@@ -41,24 +32,15 @@ describe('CreateSettingValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
         [
           PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.COUNTER)
-            .withValue(123)
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.COUNTER, 123),
         ],
       ]),
     });
@@ -73,24 +55,15 @@ describe('CreateSettingValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
         [
           PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.COUNTER)
-            .withValue(123)
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.COUNTER, 123),
         ],
       ]),
     }).validate();
@@ -106,24 +79,15 @@ describe('CreateSettingValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
         [
           PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.COUNTER)
-            .withValue(123)
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.COUNTER, 123),
         ],
       ]),
     }).validate();
@@ -139,22 +103,13 @@ describe('CreateSettingValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
-        [
-          PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder().withKey(null).withValue(123).build(),
-        ],
+        [PropertyKeyEnum.COUNTER, new PropertyValidator(null, 123)],
       ]),
     }).validate();
     expect(result).toBeInstanceOf(Array);

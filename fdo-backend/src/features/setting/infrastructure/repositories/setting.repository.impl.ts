@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument, Model } from 'mongoose';
 import { EntityIdGenerator } from '~/common/database';
 import { SettingKeyEnum } from '~/features/setting/domain/enums';
-import { SettingFactory } from '~/features/setting/domain/interfaces/factories';
+import { SettingFactory } from '~/features/setting/domain/factories';
 import { SettingRepository } from '~/features/setting/domain/interfaces/repositories';
-import { Setting } from '~/features/setting/domain/models';
+import { Setting } from '~/features/setting/domain/interfaces/models';
 import { SettingDocument, SettingEntity } from '../entities';
 
 @Injectable()

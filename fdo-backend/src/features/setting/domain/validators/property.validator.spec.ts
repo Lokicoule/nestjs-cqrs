@@ -1,18 +1,16 @@
 import { ValidationError } from 'class-validator';
 import { PropertyKeyEnum } from '../enums';
 import { PropertyValidator } from './property.validator';
-import { PropertyValidatorBuilder } from './property.validator.builder';
 
 describe('PropertyValidator', () => {
   describe('validate', () => {
     it('should not return an error for a valid string property', () => {
-      const result = new PropertyValidatorBuilder()
-        .withKey(PropertyKeyEnum.PREFIX)
-        .withValue('valid property value')
-        .build()
-        .validate();
+      const validator = new PropertyValidator(
+        PropertyKeyEnum.PREFIX,
+        'valid property value',
+      );
 
-      expect(result).toBeNull();
+      expect(validator.validate()).toBeNull();
     });
 
     it('should not return an error for a valid number property', () => {

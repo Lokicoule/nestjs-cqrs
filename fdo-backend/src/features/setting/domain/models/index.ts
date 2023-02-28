@@ -1,1 +1,1 @@
-export * from './setting.model';
+export * from './setting.model.impl';

@@ -1,5 +1,5 @@
 import { PropertyKeyEnum, SettingKeyEnum } from '../enums';
-import { PropertyValidatorBuilder } from './property.validator.builder';
+import { PropertyValidator } from './property.validator';
 import { UpdateSettingValidator } from './update-setting.validator';
 
 describe('SettingWithIdValidator', () => {
@@ -11,24 +11,15 @@ describe('SettingWithIdValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
         [
           PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.COUNTER)
-            .withValue(123)
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.COUNTER, 123),
         ],
       ]),
     });
@@ -44,24 +35,15 @@ describe('SettingWithIdValidator', () => {
       properties: new Map([
         [
           PropertyKeyEnum.PREFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.PREFIX)
-            .withValue('prefix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.PREFIX, 'prefix'),
         ],
         [
           PropertyKeyEnum.SUFFIX,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.SUFFIX)
-            .withValue('suffix')
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.SUFFIX, 'suffix'),
         ],
         [
           PropertyKeyEnum.COUNTER,
-          new PropertyValidatorBuilder()
-            .withKey(PropertyKeyEnum.COUNTER)
-            .withValue(123)
-            .build(),
+          new PropertyValidator(PropertyKeyEnum.COUNTER, 123),
         ],
       ]),
     });

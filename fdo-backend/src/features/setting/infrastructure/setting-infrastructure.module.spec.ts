@@ -1,29 +1,34 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SettingRepository } from '~/features/setting/domain/interfaces/repositories';
-import { SettingValidatorBuilder } from '~/features/setting/domain/interfaces/validators';
-import { SettingFactory } from '~/features/setting/domain/interfaces/factories';
+import { SettingFactory, SettingValidatorFactory } from '../domain/factories';
 import { SettingInfrastructureModule } from './setting-infrastructure.module';
 
 describe('SettingInfrastructureModule', () => {
   let module: TestingModule;
-  let settingRepository: SettingRepository;
-  let settingValidatorBuilder: SettingValidatorBuilder;
   let settingFactory: SettingFactory;
+  let settingRepository: SettingRepository;
+  let settingValidatorFactory: SettingValidatorFactory;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [SettingInfrastructureModule],
     }).compile();
 
-    settingRepository = module.get<SettingRepository>(SettingRepository);
-    settingValidatorBuilder = module.get<SettingValidatorBuilder>(
-      SettingValidatorBuilder,
-    );
     settingFactory = module.get<SettingFactory>(SettingFactory);
+    settingRepository = module.get<SettingRepository>(SettingRepository);
+    settingValidatorFactory = module.get<SettingValidatorFactory>(
+      SettingValidatorFactory,
+    );
   });
 
   afterAll(async () => {
     await module.close();
+  });
+
+  describe('SettingFactory', () => {
+    it('should be defined', () => {
+      expect(settingFactory).toBeDefined();
+    });
   });
 
   describe('SettingRepository', () => {
@@ -32,15 +37,9 @@ describe('SettingInfrastructureModule', () => {
     });
   });
 
-  describe('SettingValidatorBuilder', () => {
+  describe('SettingValidatorFactory', () => {
     it('should be defined', () => {
-      expect(settingValidatorBuilder).toBeDefined();
-    });
-  });
-
-  describe('SettingFactory', () => {
-    it('should be defined', () => {
-      expect(settingFactory).toBeDefined();
+      expect(settingValidatorFactory).toBeDefined();
     });
   });
 });

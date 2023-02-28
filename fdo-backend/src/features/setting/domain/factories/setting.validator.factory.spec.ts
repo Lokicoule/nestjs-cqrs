@@ -7,16 +7,16 @@ import {
   CreateSettingValidator,
   UpdateSettingValidator,
 } from '~/features/setting/domain/validators';
-import { SettingValidatorBuilderImpl } from './setting.validator.builder.impl';
+import { SettingValidatorFactory } from './setting.validator.factory';
 
-describe('SettingValidatorBuilderImpl', () => {
-  let settingValidatorBuilder: SettingValidatorBuilderImpl;
+describe('SettingValidatorFactoryImpl', () => {
+  let settingValidatorFactory: SettingValidatorFactory;
 
   beforeEach(() => {
-    settingValidatorBuilder = new SettingValidatorBuilderImpl();
+    settingValidatorFactory = new SettingValidatorFactory();
   });
 
-  describe('buildCreateSettingValidator', () => {
+  describe('createValidatorForCreateSetting', () => {
     it('should return a CreateSettingValidator', () => {
       const command: CreateSettingCommand = {
         userId: 'user123',
@@ -25,13 +25,13 @@ describe('SettingValidatorBuilderImpl', () => {
       };
 
       const validator =
-        settingValidatorBuilder.buildCreateSettingValidator(command);
+        settingValidatorFactory.createValidatorForCreateSetting(command);
 
       expect(validator).toBeInstanceOf(CreateSettingValidator);
     });
   });
 
-  describe('buildUpdateSettingValidator', () => {
+  describe('createValidatorForUpdateSetting', () => {
     it('should return an UpdateSettingValidator', () => {
       const command: UpdateSettingCommand = {
         id: 'setting123',
@@ -41,7 +41,7 @@ describe('SettingValidatorBuilderImpl', () => {
       };
 
       const validator =
-        settingValidatorBuilder.buildUpdateSettingValidator(command);
+        settingValidatorFactory.createValidatorForUpdateSetting(command);
 
       expect(validator).toBeInstanceOf(UpdateSettingValidator);
     });

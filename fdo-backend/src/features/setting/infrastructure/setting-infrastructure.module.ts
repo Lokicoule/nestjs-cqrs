@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseModule } from '~/common/database';
-import { SettingFactory } from '~/features/setting/domain/interfaces/factories';
+import {
+  SettingFactory,
+  SettingValidatorFactory,
+} from '~/features/setting/domain/factories';
 import { SettingRepository } from '~/features/setting/domain/interfaces/repositories';
-import { SettingValidatorBuilder } from '~/features/setting/domain/interfaces/validators';
+import {} from '../domain/validators';
 import { SettingEntity, SettingSchema } from './entities';
-import { SettingFactoryImpl } from './factories';
 import { SettingRepositoryImpl } from './repositories';
-import { SettingValidatorBuilderImpl } from './validators';
 
 @Module({
   imports: [
+    CqrsModule,
     DatabaseModule,
     MongooseModule.forFeature([
       { name: SettingEntity.name, schema: SettingSchema },
@@ -21,15 +24,9 @@ import { SettingValidatorBuilderImpl } from './validators';
       provide: SettingRepository,
       useClass: SettingRepositoryImpl,
     },
-    {
-      provide: SettingValidatorBuilder,
-      useClass: SettingValidatorBuilderImpl,
-    },
-    {
-      provide: SettingFactory,
-      useClass: SettingFactoryImpl,
-    },
+    SettingFactory,
+    SettingValidatorFactory,
   ],
-  exports: [SettingRepository, SettingValidatorBuilder, SettingFactory],
+  exports: [SettingRepository, SettingFactory, SettingValidatorFactory],
 })
 export class SettingInfrastructureModule {}

@@ -1,5 +1,5 @@
 import { SettingKeyEnum } from '../../enums';
-import { Setting } from '../../models';
+import { Setting } from '../../interfaces/models';
 
 export abstract class SettingRepository {
   abstract generateId(namespace?: string): string;
