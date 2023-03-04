@@ -18,11 +18,10 @@ export class CreateProductWithCodeGenCommandHandler
     this.validateCommand(command);
 
     const code = await this.commandBus.execute(
-      command.generateProductCodeCommand,
+      command.createGenerateProductCodeCommand(),
     );
 
-    command.createProductCommand.code = code;
-    return this.commandBus.execute(command.createProductCommand);
+    return this.commandBus.execute(command.createCreateProductCommand(code));
   }
 
   private validateCommand(command: CreateProductWithCodeGenCommand) {

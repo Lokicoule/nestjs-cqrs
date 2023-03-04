@@ -9,14 +9,11 @@ export class CreateProductWithCodeGenCommand implements ICommand {
     public readonly code?: string,
   ) {}
 
-  readonly createProductCommand = new CreateProductCommand(
-    this.userId,
-    this.label,
-    this.code,
-  );
+  createCreateProductCommand(code?: string): CreateProductCommand {
+    return new CreateProductCommand(this.userId, this.label, code || this.code);
+  }
 
-  readonly generateProductCodeCommand = new GenerateProductCodeCommand(
-    this.userId,
-    this.code,
-  );
+  createGenerateProductCodeCommand(): GenerateProductCodeCommand {
+    return new GenerateProductCodeCommand(this.userId, this.code);
+  }
 }
