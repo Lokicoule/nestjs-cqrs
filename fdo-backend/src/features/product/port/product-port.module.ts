@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { AuthModule, GraphQLModule } from '~/common';
+import { AuthModule } from '~/common/auth';
+import { GraphQLModule } from '~/common/graphql';
 import { ProductApplicationModule } from '../application';
 import { ProductResolver } from './resolvers';
 

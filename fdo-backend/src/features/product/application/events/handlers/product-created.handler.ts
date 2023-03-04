@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { ProductCreatedEvent } from '~/features/product/domain/interfaces/events';
+import { ProductCreatedEvent } from '~/features/product/domain/events';
 import { Logger } from '@nestjs/common';
 
 @EventsHandler(ProductCreatedEvent)

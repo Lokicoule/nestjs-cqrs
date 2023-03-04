@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument, Model } from 'mongoose';
 import { EntityIdGenerator } from '~/common/database';
+import { ProductFactory } from '../../domain/factories';
+import { Product } from '../../domain/interfaces/models';
 import { ProductRepository } from '../../domain/interfaces/repositories';
-import { Product } from '../../domain/models';
 import { ProductDocument, ProductEntity } from '../entities';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class ProductRepositoryImpl implements ProductRepository {
   constructor(
     @InjectModel(ProductEntity.name)
     private readonly productModel: Model<ProductDocument>,
+    private readonly productFactory: ProductFactory,
   ) {}
 
   generateId(namespace?: string): string {
@@ -48,7 +50,7 @@ export class ProductRepositoryImpl implements ProductRepository {
       .findOne({ id, userId })
       .lean()
       .exec();
-    return this.toProduct(productDoc);
+    return productDoc ? this.toProduct(productDoc) : null;
   }
 
   async findAll(userId: string, ids?: string[]): Promise<Product[]> {
@@ -70,7 +72,12 @@ export class ProductRepositoryImpl implements ProductRepository {
   private toProduct(
     doc: LeanDocument<ProductDocument> | ProductDocument,
   ): Product {
-    const { id, code, label, userId, createdAt, updatedAt } = doc;
-    return new Product({ id, code, label, userId, createdAt, updatedAt });
+    const { id, code, label, userId } = doc;
+    return this.productFactory.create({
+      id,
+      code,
+      label,
+      userId,
+    });
   }
 }

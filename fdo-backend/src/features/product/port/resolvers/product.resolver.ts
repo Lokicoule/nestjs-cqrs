@@ -1,8 +1,7 @@
-import { CognitoUser } from '@nestjs-cognito/auth';
 import { Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateProductCommand } from '../../application/commands';
+import { CreateProductWithCodeGenCommand } from '../../application/commands/impl';
 import {
   GetProductQuery,
   GetProductsQuery,
@@ -46,7 +45,7 @@ export class ProductResolver {
      */ @Args('input') input: CreateProductInputDTO,
   ): Promise<ProductDTO> {
     const product = await this.commandBus.execute(
-      new CreateProductCommand('userId', input.label, input.code),
+      new CreateProductWithCodeGenCommand('userId', input.label, input.code),
     );
     this.logger.debug(`Product created with ID ${product.id}`);
     return new ProductDTO(product);

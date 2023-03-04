@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+/* import { Injectable } from '@nestjs/common';
 import { ICommand, ofType, Saga } from '@nestjs/cqrs';
 import { from, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import {
 } from '~/features/setting/domain/enums';
 import { Setting } from '~/features/setting/domain/models';
 import { SettingRepository } from '~/features/setting/domain/interfaces/validators';
-import { GenerateProductCodeCommand } from '../commands';
+import { GenerateProductCodeCommand } from '../commands/handlers';
 
 @Injectable()
 export class ProductCodeGenerationSaga {
@@ -89,3 +89,4 @@ export class ProductCodeGenerationSaga {
     );
   };
 }
+ */

@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ProductRepository } from '~/features/product/domain/interfaces/repositories';
-import { Product } from '~/features/product/domain/models';
+import { Product } from '~/features/product/domain/interfaces/models';
 import { GetProductsQuery } from '../impl';
 
 @QueryHandler(GetProductsQuery)

@@ -1,4 +1,4 @@
-import { Product } from '../../models/product.model';
+import { Product } from '../models';
 
 export abstract class ProductRepository {
   abstract generateId(namespace?: string): string;
