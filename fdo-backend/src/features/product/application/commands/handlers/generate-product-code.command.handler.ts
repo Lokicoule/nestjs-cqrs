@@ -54,7 +54,7 @@ export class GenerateProductCodeCommandHandler
       properties: new Map<ProductSettingPropertyKey, string | number>([
         [ProductSettingPropertyKey.CODE_GENERATION_COUNTER, 0],
         [ProductSettingPropertyKey.CODE_GENERATION_COUNTER_PADDING, 3],
-        [ProductSettingPropertyKey.CODE_GENERATION_MAX_ATTEMPTS, 10],
+        [ProductSettingPropertyKey.CODE_GENERATION_MAX_ATTEMPTS, 20],
         [ProductSettingPropertyKey.CODE_GENERATION_PREFIX, ''],
         [ProductSettingPropertyKey.CODE_GENERATION_SUFFIX, 'P'],
         [
@@ -73,7 +73,7 @@ export class GenerateProductCodeCommandHandler
     ) as number;
     let code: string;
 
-    for (; nbAttempts <= maxAttempts; nbAttempts++) {
+    for (; nbAttempts < maxAttempts; nbAttempts++) {
       code = this.productCodeGenerator.generate(setting, nbAttempts);
       if (!(await this.productRepository.exists(setting.userId, code))) {
         break;
@@ -83,7 +83,7 @@ export class GenerateProductCodeCommandHandler
     setting.counterUpdated(nbAttempts);
     await this.settingRepository.update(setting);
 
-    if (nbAttempts === maxAttempts) {
+    if (nbAttempts >= maxAttempts) {
       throw new BadRequestException(
         'Unable to generate a unique product code after 10 attempts',
       );
