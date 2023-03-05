@@ -15,13 +15,18 @@ export class CreateProductWithCodeGenCommandHandler
   constructor(private readonly commandBus: CommandBus) {}
 
   async execute(command: CreateProductWithCodeGenCommand): Promise<Product> {
-    this.validateCommand(command);
+    try {
+      this.validateCommand(command);
 
-    const code = await this.commandBus.execute(
-      command.createGenerateProductCodeCommand(),
-    );
+      const code = await this.commandBus.execute(
+        command.createGenerateProductCodeCommand(),
+      );
 
-    return this.commandBus.execute(command.createCreateProductCommand(code));
+      return this.commandBus.execute(command.createCreateProductCommand(code));
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 
   private validateCommand(command: CreateProductWithCodeGenCommand) {
@@ -32,7 +37,6 @@ export class CreateProductWithCodeGenCommandHandler
       .validate();
 
     if (validation) {
-      this.logger.error(validation);
       throw new BadRequestException(validation);
     }
   }

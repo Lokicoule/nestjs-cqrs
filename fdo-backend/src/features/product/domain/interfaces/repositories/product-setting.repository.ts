@@ -5,7 +5,10 @@ export abstract class ProductSettingRepository {
   abstract generateId(namespace?: string): string;
   abstract create(setting: ProductSetting): Promise<ProductSetting>;
   abstract update(setting: ProductSetting): Promise<ProductSetting>;
-  abstract createOrUpdate(setting: ProductSetting): Promise<ProductSetting>;
+  abstract upsert(
+    filter: Record<string, unknown>,
+    setting: ProductSetting,
+  ): Promise<ProductSetting>;
   abstract delete(userId: string, id: string): Promise<void>;
   abstract deleteMany(userId: string, ids: string[]): Promise<void>;
   abstract findOne(filter: Record<string, any>): Promise<ProductSetting>;

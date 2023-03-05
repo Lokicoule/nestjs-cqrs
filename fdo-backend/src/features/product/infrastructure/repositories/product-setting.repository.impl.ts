@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { LeanDocument, Model } from 'mongoose';
+import { FilterQuery, LeanDocument, Model } from 'mongoose';
 import { EntityIdGenerator } from '~/common/database';
-import { ProductSettingKey } from '../../domain/enums';
 import { ProductSettingFactory } from '../../domain/factories';
 import { ProductSetting } from '../../domain/interfaces/models';
 import { ProductSettingRepository } from '../../domain/interfaces/repositories';
@@ -38,13 +37,16 @@ export class ProductSettingRepositoryImpl implements ProductSettingRepository {
       : null;
   }
 
-  async createOrUpdate(setting: ProductSetting): Promise<ProductSetting> {
-    const settingSettingDoc = await this.productSettingModel.findOneAndUpdate(
-      { id: setting.id, userId: setting.userId },
+  async upsert(
+    filter: FilterQuery<ProductSettingDocument>,
+    setting: ProductSetting,
+  ): Promise<ProductSetting> {
+    const settingDoc = await this.productSettingModel.findOneAndUpdate(
+      filter,
       setting,
       { new: true, lean: true, upsert: true },
     );
-    return settingSettingDoc ? this.toProductSetting(settingSettingDoc) : null;
+    return settingDoc ? this.toProductSetting(settingDoc) : null;
   }
 
   async delete(userId: string, id: string): Promise<void> {

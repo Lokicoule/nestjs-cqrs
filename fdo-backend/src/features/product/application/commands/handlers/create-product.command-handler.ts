@@ -16,25 +16,31 @@ export class CreateProductCommandHandler
   ) {}
 
   async execute(command: CreateProductCommand) {
-    this.validateCommand(command);
+    try {
+      this.validateCommand(command);
 
-    const { label, userId, code } = command;
+      const { label, userId, code } = command;
 
-    if (await this.productRepository.exists(userId, code)) {
-      throw new BadRequestException(
-        'Product code already exists in database for this user',
-      );
+      if (await this.productRepository.exists(userId, code)) {
+        throw new BadRequestException(
+          'Product code already exists in database for this user',
+        );
+      }
+
+      const id = this.productRepository.generateId(userId);
+
+      const product = this.productFactory.create({
+        id,
+        code,
+        label,
+        userId,
+      });
+
+      return await this.productRepository.create(product);
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
     }
-    const id = this.productRepository.generateId(userId);
-
-    const product = this.productFactory.create({
-      id,
-      code,
-      label,
-      userId,
-    });
-
-    return await this.productRepository.create(product);
   }
 
   private validateCommand(command: CreateProductCommand) {
@@ -46,7 +52,6 @@ export class CreateProductCommandHandler
       .validate();
 
     if (validation) {
-      this.logger.error(validation);
       throw new BadRequestException(validation);
     }
   }
