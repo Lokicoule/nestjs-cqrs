@@ -2,7 +2,7 @@ import { ICommand } from '@nestjs/cqrs';
 import { CreateProductCommand } from './create-product.command';
 import { GenerateProductCodeCommand } from './generate-product-code.command';
 
-export class CreateProductWithCodeGenCommand implements ICommand {
+export class CreateProductWithAutoCodeCommand implements ICommand {
   constructor(
     public readonly userId: string,
     public readonly label: string,

@@ -2,19 +2,19 @@ import { BadRequestException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler, CommandBus } from '@nestjs/cqrs';
 import { Product } from '~/features/product/domain/interfaces/models';
 import { ProductValidatorBuilder } from '~/features/product/domain/validators/product';
-import { CreateProductWithCodeGenCommand } from '../impl';
+import { CreateProductWithAutoCodeCommand } from '../impl';
 
-@CommandHandler(CreateProductWithCodeGenCommand)
-export class CreateProductWithCodeGenCommandHandler
-  implements ICommandHandler<CreateProductWithCodeGenCommand>
+@CommandHandler(CreateProductWithAutoCodeCommand)
+export class CreateProductWithAutoCodeCommandHandler
+  implements ICommandHandler<CreateProductWithAutoCodeCommand>
 {
   private readonly logger = new Logger(
-    CreateProductWithCodeGenCommandHandler.name,
+    CreateProductWithAutoCodeCommandHandler.name,
   );
 
   constructor(private readonly commandBus: CommandBus) {}
 
-  async execute(command: CreateProductWithCodeGenCommand): Promise<Product> {
+  async execute(command: CreateProductWithAutoCodeCommand): Promise<Product> {
     try {
       this.validateCommand(command);
 
@@ -29,7 +29,7 @@ export class CreateProductWithCodeGenCommandHandler
     }
   }
 
-  private validateCommand(command: CreateProductWithCodeGenCommand) {
+  private validateCommand(command: CreateProductWithAutoCodeCommand) {
     const validation = new ProductValidatorBuilder()
       .withLabel(command.label)
       .withUserId(command.userId)
