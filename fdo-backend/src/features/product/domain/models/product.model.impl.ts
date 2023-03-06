@@ -1,4 +1,5 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+import { ProductCreatedEvent } from '../events';
 import { Product } from '../interfaces/models';
 
 export type ProductRequiredFields = Readonly<
@@ -30,5 +31,9 @@ export class ProductImpl extends AggregateRoot implements Product {
   constructor(fields: ProductFields) {
     super();
     Object.assign(this, fields);
+  }
+
+  addProduct() {
+    this.apply(new ProductCreatedEvent(this));
   }
 }

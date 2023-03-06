@@ -36,7 +36,11 @@ export class CreateProductCommandHandler
         userId,
       });
 
-      return await this.productRepository.create(product);
+      await this.productRepository.create(product);
+
+      product.addProduct();
+      product.commit();
+      return product;
     } catch (error) {
       this.logger.error(error);
       throw error;

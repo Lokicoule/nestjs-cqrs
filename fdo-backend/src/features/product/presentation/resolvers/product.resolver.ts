@@ -47,7 +47,6 @@ export class ProductResolver {
     const product = await this.commandBus.execute(
       new CreateProductWithAutoCodeCommand('userId', input.label, input.code),
     );
-    this.logger.debug(`Product created with ID ${product.id}`);
     return new ProductDTO(product);
   }
 }

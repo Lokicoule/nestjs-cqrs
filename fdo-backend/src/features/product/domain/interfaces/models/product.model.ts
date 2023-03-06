@@ -7,4 +7,5 @@ export interface Product extends AggregateRoot {
   readonly label: string;
   /*   readonly createdAt: Date;
   readonly updatedAt: Date; */
+  addProduct(): void;
 }
