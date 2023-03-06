@@ -2,40 +2,40 @@ import { ProductSettingPropertyKey } from '../../../enums';
 import { ProductSetting } from '../../../interfaces/models';
 import { ProductCodeGenerationStrategy } from './product-code-generation.interface';
 
+const DEFAULT_PATTERN = '{prefix}{counter}{suffix}';
+const DEFAULT_PREFIX = '';
+const DEFAULT_SUFFIX = 'P';
+const DEFAULT_COUNTER = 0;
+const DEFAULT_COUNTER_PADDING = 3;
+
 export class DefaultProductCodeGenerationStrategy
   implements ProductCodeGenerationStrategy
 {
-  private readonly DEFAULT_PATTERN = '{prefix}{counter}{suffix}';
-  private readonly DEFAULT_PREFIX = '';
-  private readonly DEFAULT_SUFFIX = 'P';
-  private readonly DEFAULT_COUNTER = 0;
-  private readonly DEFAULT_COUNTER_PADDING = 3;
-
   generate(setting: ProductSetting, nbAttempts = 1): string {
     const pattern = this.getPropertyValue<string>(
       setting,
       ProductSettingPropertyKey.CODE_GENERATION_PATTERN,
-      this.DEFAULT_PATTERN,
+      DEFAULT_PATTERN,
     );
     const prefix = this.getPropertyValue<string>(
       setting,
       ProductSettingPropertyKey.CODE_GENERATION_PREFIX,
-      this.DEFAULT_PREFIX,
+      DEFAULT_PREFIX,
     );
     const suffix = this.getPropertyValue<string>(
       setting,
       ProductSettingPropertyKey.CODE_GENERATION_SUFFIX,
-      this.DEFAULT_SUFFIX,
+      DEFAULT_SUFFIX,
     );
     const counter = this.getPropertyValue<number>(
       setting,
       ProductSettingPropertyKey.CODE_GENERATION_COUNTER,
-      this.DEFAULT_COUNTER,
+      DEFAULT_COUNTER,
     );
     const counterPadding = this.getPropertyValue<number>(
       setting,
       ProductSettingPropertyKey.CODE_GENERATION_COUNTER_PADDING,
-      this.DEFAULT_COUNTER_PADDING,
+      DEFAULT_COUNTER_PADDING,
     );
 
     const generatedCode = pattern

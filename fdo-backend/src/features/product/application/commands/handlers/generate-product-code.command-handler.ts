@@ -78,7 +78,10 @@ export class GenerateProductCodeCommandHandler
       properties,
     });
 
-    return await this.settingRepository.upsert({ userId, key }, productSetting);
+    return await this.settingRepository.findOneOrCreate(
+      { userId, key },
+      productSetting,
+    );
   }
 
   private async generateUniqueProductCode(

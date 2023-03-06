@@ -5,7 +5,7 @@ export abstract class ProductSettingRepository {
   abstract generateId(namespace?: string): string;
   abstract create(setting: ProductSetting): Promise<ProductSetting>;
   abstract update(setting: ProductSetting): Promise<ProductSetting>;
-  abstract upsert(
+  abstract findOneOrCreate(
     filter: Record<string, unknown>,
     setting: ProductSetting,
   ): Promise<ProductSetting>;

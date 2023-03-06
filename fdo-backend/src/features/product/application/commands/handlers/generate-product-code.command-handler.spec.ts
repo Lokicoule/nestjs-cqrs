@@ -24,7 +24,7 @@ const mockProductSettingRepository = {
   create: jest.fn(),
   update: jest.fn(),
   generateId: jest.fn(),
-  upsert: jest.fn(),
+  findOneOrCreate: jest.fn(),
 };
 
 const mockProductCodeGenerator = {
@@ -118,14 +118,18 @@ describe('GenerateProductCodeCommandHandler', () => {
       };
       const code = 'ABC';
 
-      mockProductSettingRepository.upsert.mockResolvedValueOnce(setting);
+      mockProductSettingRepository.findOneOrCreate.mockResolvedValueOnce(
+        setting,
+      );
       mockProductCodeGenerator.generate.mockReturnValueOnce(code);
       mockProductRepository.exists.mockResolvedValueOnce(false);
 
       const result = await commandHandler.execute(command);
 
       expect(result).toBe(code);
-      expect(mockProductSettingRepository.upsert).toHaveBeenCalledTimes(1);
+      expect(
+        mockProductSettingRepository.findOneOrCreate,
+      ).toHaveBeenCalledTimes(1);
       expect(mockProductCodeGenerator.generate).toHaveBeenCalledWith(
         setting,
         1,
@@ -154,13 +158,15 @@ describe('GenerateProductCodeCommandHandler', () => {
       const command = new GenerateProductCodeCommand('1');
       mockProductSettingRepository.generateId.mockReturnValueOnce('1');
       mockProductRepository.exists.mockResolvedValue(false);
-      mockProductSettingRepository.upsert.mockReturnValueOnce(setting);
+      mockProductSettingRepository.findOneOrCreate.mockReturnValueOnce(setting);
       mockProductCodeGenerator.generate.mockReturnValue('123P');
       mockProductSettingRepository.update.mockResolvedValueOnce(setting);
 
       await commandHandler.execute(command);
 
-      expect(mockProductSettingRepository.upsert).toHaveBeenCalledTimes(1);
+      expect(
+        mockProductSettingRepository.findOneOrCreate,
+      ).toHaveBeenCalledTimes(1);
       expect(mockProductSettingRepository.update).toHaveBeenCalledTimes(1);
     });
 
@@ -183,7 +189,9 @@ describe('GenerateProductCodeCommandHandler', () => {
       });
       const command = new GenerateProductCodeCommand('1');
       jest.spyOn(setting, 'counterUpdated').mockImplementation();
-      mockProductSettingRepository.upsert.mockResolvedValueOnce(setting);
+      mockProductSettingRepository.findOneOrCreate.mockResolvedValueOnce(
+        setting,
+      );
       mockProductRepository.exists.mockResolvedValue(true);
       mockProductCodeGenerator.generate.mockReturnValue('123P');
       mockProductSettingRepository.update.mockResolvedValueOnce(setting);

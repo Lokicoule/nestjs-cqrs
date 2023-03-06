@@ -1,13 +1,12 @@
 import { BadRequestException } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateProductCommandHandler } from './create-product.command-handler';
-import { CreateProductCommand } from '../impl/create-product.command';
+import { Test } from '@nestjs/testing';
 import { ProductFactory } from '~/features/product/domain/factories';
-import { ProductRepository } from '~/features/product/domain/interfaces/repositories';
-import { ProductValidatorBuilder } from '~/features/product/domain/validators/product';
-import { ProductImpl } from '~/features/product/domain/models';
 import { Product } from '~/features/product/domain/interfaces/models';
+import { ProductRepository } from '~/features/product/domain/interfaces/repositories';
+import { ProductImpl } from '~/features/product/domain/models';
+import { CreateProductCommand } from '../impl/create-product.command';
+import { CreateProductCommandHandler } from './create-product.command-handler';
 
 describe('CreateProductCommandHandler', () => {
   let handler: CreateProductCommandHandler;

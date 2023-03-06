@@ -37,16 +37,15 @@ export class ProductSettingRepositoryImpl implements ProductSettingRepository {
       : null;
   }
 
-  async upsert(
+  async findOneOrCreate(
     filter: FilterQuery<ProductSettingDocument>,
     setting: ProductSetting,
   ): Promise<ProductSetting> {
-    const settingDoc = await this.productSettingModel.findOneAndUpdate(
-      filter,
-      setting,
-      { new: true, lean: true, upsert: true },
-    );
-    return settingDoc ? this.toProductSetting(settingDoc) : null;
+    const settingDoc = await this.productSettingModel.findOne(filter);
+
+    return settingDoc
+      ? this.toProductSetting(settingDoc)
+      : this.create(setting);
   }
 
   async delete(userId: string, id: string): Promise<void> {
