@@ -1,20 +1,21 @@
-# Setting
-[] module
-[] repository
+application/commands should implement domain/commands
+application/queries should implement domain/queries
+application/events should implement domain/events
 
-# Product
-[] repository
-[] queries
-[] resolvers
-[] module
+refactor domain/interfaces
 
-# Tests
-[] Setting
-  [] repository
-[] Product
-  [] commands handler
-  [] queries handler
-  [] events handler
-  [] repository
-  [] sagas
-  [] resolvers
+refactor application:
+merge commands and command-handlers
+
+- impl
+- handlers
+
+merge queries and query-handlers
+
+- impl
+- handlers
+
+merge events and event-handlers
+
+- impl
+- handlers

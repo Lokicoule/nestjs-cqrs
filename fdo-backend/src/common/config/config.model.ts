@@ -23,6 +23,13 @@ export class Config {
     uri: string;
   };
 
+  @IsNotEmpty()
+  public readonly redis: {
+    host: string;
+    port: number;
+    password: string;
+  };
+
   constructor() {
     this.http = {
       port: Number(process.env.HTTP_PORT),
@@ -37,6 +44,11 @@ export class Config {
     };
     this.database = {
       uri: process.env.DATABASE_URI,
+    };
+    this.redis = {
+      host: process.env.REDIS_HOST,
+      port: Number(process.env.REDIS_PORT),
+      password: process.env.REDIS_PASSWORD,
     };
   }
 }

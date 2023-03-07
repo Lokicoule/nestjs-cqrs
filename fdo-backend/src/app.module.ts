@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CacheModule, ConfigModule } from '~/common';
+import { CacheModule } from '~/common/cache';
+import { ConfigModule } from '~/common/config';
 import { FeaturesModule } from './features';
 
 @Module({

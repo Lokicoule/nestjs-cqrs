@@ -9,7 +9,15 @@ export class CacheService {
     return await this.cacheManager.get(key);
   }
 
-  async set(key: string, value: any): Promise<any> {
+  async set(key: string, value: any, ttl?: number): Promise<any> {
+    if (ttl) {
+      return await this.cacheManager.set(key, value, ttl);
+    }
+
     return await this.cacheManager.set(key, value);
+  }
+
+  async del(key: string): Promise<any> {
+    return await this.cacheManager.del(key);
   }
 }

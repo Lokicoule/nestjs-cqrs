@@ -34,6 +34,7 @@ export class ProductImpl extends AggregateRoot implements Product {
   }
 
   addProduct() {
+    console.log('Product added');
     this.apply(new ProductCreatedEvent(this));
   }
 }

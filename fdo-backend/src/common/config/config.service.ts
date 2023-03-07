@@ -24,6 +24,10 @@ export class ConfigService {
   public get database() {
     return this.config.database;
   }
+
+  public get redis() {
+    return this.config.redis;
+  }
 }
 
 registerAs('app', () => new ConfigService(new Config()));
